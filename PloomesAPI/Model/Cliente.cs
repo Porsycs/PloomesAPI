@@ -1,6 +1,8 @@
-﻿namespace PloomesAPI.Common
+﻿using PloomesAPI.Model.Generic;
+
+namespace PloomesAPI.Common
 {
-	public class Cliente : PloomesCommon
+    public class Cliente : PloomesCommon
 	{
 
 	}

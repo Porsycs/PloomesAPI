@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using PloomesAPI.Common;
-using PloomesAPI.Common.Interface;
+using PloomesAPI.Services.Interface.Generic;
 
 namespace PloomesAPI.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("api/v1/[controller]")]
 	public class ClienteController : ControllerBase
 	{
-		private readonly IClienteRepository _clienteRepository;
+		private readonly IRepository<Cliente> _repository;
 
-		public ClienteController(IClienteRepository clienteRepository) => _clienteRepository = clienteRepository;
+		public ClienteController(IRepository<Cliente> repository) => _repository = repository;
 
 
 		/// <summary>
@@ -19,35 +19,35 @@ namespace PloomesAPI.Controllers
 		[HttpGet("GetAll/")]
 		public IActionResult GetAllClientes()
 		{
-				var cliente = _clienteRepository.GetAllClientes();
+				var cliente = _repository.GetAll();
 				return Ok(cliente);
 		}
 
 		[HttpGet("GetCliente/{Id}")]
 		public IActionResult GetClienteById(Guid Id)
 		{
-			var cliente = _clienteRepository.GetClienteById(Id);
+			var cliente = _repository.GetById(Id);
 			return Ok(cliente);
 		}
 
 		[HttpPost("Insert/")]
 		public IActionResult InsertCliente([FromBody] Cliente cli)
 		{
-			var cliente = _clienteRepository.InsertCliente(cli);
+			var cliente = _repository.Insert(cli);
 			return Ok(cliente);
 		}
 
 		[HttpPost("Update/")]
 		public IActionResult UpdateCliente([FromBody] Cliente cli)
 		{
-			var cliente = _clienteRepository.UpdateCliente(cli);
+			var cliente = _repository.Update(cli);
 			return Ok(cliente);
 		}
 
 		[HttpDelete("Delete/{Id}")]
 		public IActionResult DeleteCliente(Guid Id)
 		{
-			_clienteRepository.DeleteCliente(Id);
+			_repository.Delete(Id);
 			return NoContent();
 		}
 	}

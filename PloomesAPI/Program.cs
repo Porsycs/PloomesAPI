@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using PloomesAPI.Common.Interface;
-using PloomesAPI.Common.Repository;
 using PloomesAPI.Model.Context;
+using PloomesAPI.Services.Interface.Generic;
+using PloomesAPI.Services.Repository.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 //Dependency Injection
-builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 
