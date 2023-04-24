@@ -37,7 +37,7 @@ namespace PloomesAPI.Controllers
 			return Ok(cliente);
 		}
 
-		[HttpPost("Update/")]
+		[HttpPut("Update/")]
 		public IActionResult UpdateCliente([FromBody] Cliente cli)
 		{
 			var cliente = _repository.Update(cli);
