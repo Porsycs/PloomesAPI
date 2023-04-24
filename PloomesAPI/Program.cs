@@ -1,15 +1,75 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using PloomesAPI.Configurations;
 using PloomesAPI.Model.Context;
+using PloomesAPI.Services.Interface;
 using PloomesAPI.Services.Interface.Generic;
+using PloomesAPI.Services.Repository;
 using PloomesAPI.Services.Repository.Generic;
+using System.Net.Http.Headers;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<BancoContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+var tokenConfigurations = new TokenConfiguration();
+
+new ConfigureFromConfigurationOptions<TokenConfiguration>(
+	builder.Configuration.GetSection("TokenConfigurations")
+	).Configure(tokenConfigurations);
+
+builder.Services.AddSingleton(tokenConfigurations);
+
+builder.Services.AddAuthentication(options =>
+{
+	options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+	options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+	.AddJwtBearer(options => 
+	{
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
+			ValidIssuer = tokenConfigurations.Issuer,
+			ValidAudience = tokenConfigurations.Audience,
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigurations.Secret)),
+		};
+	});
+
+builder.Services.AddAuthorization(auth =>
+{
+	auth.AddPolicy("Bearer", new AuthorizationPolicyBuilder()
+		.AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+		.RequireAuthenticatedUser().Build());
+});
+
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(builder =>
+	{
+		builder.AllowAnyOrigin()
+		.AllowAnyMethod()
+		.AllowAnyHeader();
+	});
+});
 // Add services to the container.
 builder.Services.AddControllers();
+
+builder.Services.AddMvc(options =>
+{
+	options.RespectBrowserAcceptHeader = true;
+	options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
+	options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
+})
+	.AddXmlSerializerFormatters();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -20,6 +80,10 @@ builder.Services.AddSwaggerGen(c =>
 
 //Dependency Injection
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddTransient<ITokenRepository, TokenRepository>();
+builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddTransient<ILoginRepository, LoginRepository>();
+builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
 
 var app = builder.Build();
 
@@ -34,6 +98,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseCors();
 
 app.UseAuthorization();
 

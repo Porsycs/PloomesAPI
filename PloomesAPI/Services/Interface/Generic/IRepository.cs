@@ -10,6 +10,7 @@ namespace PloomesAPI.Services.Interface.Generic
         T Insert(T item);
         T Update(T item);
         void Delete(Guid Id);
+        bool Existe(Guid Id);
 
     }
 }
