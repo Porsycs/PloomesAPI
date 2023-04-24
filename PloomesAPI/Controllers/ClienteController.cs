@@ -11,12 +11,10 @@ namespace PloomesAPI.Controllers
 	[Authorize("Bearer")]
 	public class ClienteController : ControllerBase
 	{
-		private readonly IRepository<Cliente> _repository;
 		private readonly IClienteRepository _clienteRepository;
 
-		public ClienteController(IRepository<Cliente> repository, IClienteRepository clienteRepository)
+		public ClienteController(IClienteRepository clienteRepository)
 		{
-			_repository = repository;
 			_clienteRepository = clienteRepository;
 		}
 
@@ -30,7 +28,7 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(401)]
 		public IActionResult GetAllientes()
 		{
-				var cliente = _repository.GetAll();
+				var cliente = _clienteRepository.GetAllClientes();
 
 				if(cliente == null)
 					return NotFound();
@@ -44,7 +42,7 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(401)]
 		public IActionResult GetClienteById(Guid Id)
 		{
-			var cliente = _repository.GetById(Id);
+			var cliente = _clienteRepository.GetByIdCliente(Id);
 
 			if (cliente == null) 
 				return NotFound();
@@ -72,7 +70,7 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(401)]
 		public IActionResult InsertCliente([FromBody] Cliente cli)
 		{
-			var cliente = _repository.Insert(cli);
+			var cliente = _clienteRepository.InsertCliente(cli);
 			return Ok(cliente);
 		}
 
@@ -82,7 +80,7 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(401)]
 		public IActionResult UpdateCliente([FromBody] Cliente cli)
 		{
-			var cliente = _repository.Update(cli);
+			var cliente = _clienteRepository.UpdateCliente(cli);
 			return Ok(cliente);
 		}
 
@@ -92,7 +90,7 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(401)]
 		public IActionResult DeleteCliente(Guid Id)
 		{
-			_repository.Delete(Id);
+			_clienteRepository.DeleteCliente(Id);
 			return NoContent();
 		}
 	}
