@@ -1,5 +1,6 @@
 ﻿using PloomesAPI.Configurations;
 using PloomesAPI.Model;
+using PloomesAPI.Model.ViewModel;
 using PloomesAPI.Services.Interface;
 using PloomesAPI.Services.Interface.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,7 +23,7 @@ namespace PloomesAPI.Services.Repository
 
 		}
 
-		public Token ValidateCredentials(Usuario usuarioAcesso)
+		public Token ValidateCredentials(UsuarioViewModel usuarioAcesso)
 		{
 			var usuario = _usuarioRepository.ValidaUsuario(usuarioAcesso);
 
@@ -56,7 +57,7 @@ namespace PloomesAPI.Services.Repository
 				);
 		}
 
-		public Token ValidateCredentials(Token token)
+		public Token ValidateCredentials(TokenViewModel token)
 		{
 			var accessToken = token.AccessToken;
 			var refreshToken = token.RefreshToken;

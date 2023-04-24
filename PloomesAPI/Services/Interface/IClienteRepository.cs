@@ -1,4 +1,5 @@
 ﻿using PloomesAPI.Common;
+using PloomesAPI.Model.ViewModel;
 
 namespace PloomesAPI.Services.Interface
 {
@@ -7,8 +8,9 @@ namespace PloomesAPI.Services.Interface
 		Cliente GetClienteByNome(string nome);
 		List<Cliente> GetAllClientes();
 		Cliente GetByIdCliente(Guid Id);
-		Cliente InsertCliente(Cliente item);
-		Cliente UpdateCliente(Cliente item);
+		Cliente InsertCliente(ClienteViewModel item);
+		Cliente UpdateCliente(ClienteViewModel item, Guid Id);
+		Cliente UpdateClienteViewModel(Cliente cliente, ClienteViewModel item);
 		void DeleteCliente(Guid Id);
 	}
 }

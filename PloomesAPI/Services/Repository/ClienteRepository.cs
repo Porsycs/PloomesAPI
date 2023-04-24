@@ -1,5 +1,7 @@
-﻿using PloomesAPI.Common;
+﻿using Microsoft.EntityFrameworkCore.Update.Internal;
+using PloomesAPI.Common;
 using PloomesAPI.Model.Context;
+using PloomesAPI.Model.ViewModel;
 using PloomesAPI.Services.Interface;
 using PloomesAPI.Services.Interface.Generic;
 
@@ -33,18 +35,45 @@ namespace PloomesAPI.Services.Repository
 			return cliente;
 		}
 
-		public Cliente InsertCliente(Cliente item)
+		public Cliente InsertCliente(ClienteViewModel item)
 		{
-			return _repository.Insert(item);
+			var cliente = new Cliente
+			{
+				Nome = item.Nome,
+				CPF = item.CPF,
+				Nascimento = item.Nascimento,
+				Endereco = item.Endereco,
+				Cidade = item.Cidade,
+				Estado = item.Estado,
+				Email = item.Email,
+			};
+
+			return _repository.Insert(cliente);
 		}
 
-		public Cliente UpdateCliente(Cliente item)
+		public Cliente UpdateCliente(ClienteViewModel item, Guid Id)
 		{
-			return _repository.Update(item);
+			var cliente = GetByIdCliente(Id);
+
+			return UpdateClienteViewModel(cliente, item);
 		}
 		public void DeleteCliente(Guid Id)
 		{
 			_repository.Delete(Id);
+		}
+		public Cliente UpdateClienteViewModel(Cliente cliente, ClienteViewModel item)
+		{
+			cliente.Nome = item.Nome;
+			cliente.CPF = item.CPF;
+			cliente.Nascimento = item.Nascimento;
+			cliente.Cidade = item.Cidade;
+			cliente.Estado = item.Estado;
+			cliente.Email = item.Email;
+			cliente.Endereco = item.Endereco;
+
+			_dbContext.SaveChanges();
+
+			return cliente;
 		}
 	}
 }

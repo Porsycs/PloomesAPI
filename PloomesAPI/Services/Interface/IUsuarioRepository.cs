@@ -1,10 +1,11 @@
 ﻿using PloomesAPI.Model;
+using PloomesAPI.Model.ViewModel;
 
 namespace PloomesAPI.Services.Interface
 {
 	public interface IUsuarioRepository
 	{
-		Usuario ValidaUsuario(Usuario usuario);
+		Usuario ValidaUsuario(UsuarioViewModel usuario);
 
 		Usuario RefreshUsuario(Usuario usuario);
 

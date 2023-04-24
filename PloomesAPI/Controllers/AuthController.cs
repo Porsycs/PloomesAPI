@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PloomesAPI.Model;
+using PloomesAPI.Model.ViewModel;
 using PloomesAPI.Services.Interface;
 
 namespace PloomesAPI.Controllers
@@ -17,7 +18,7 @@ namespace PloomesAPI.Controllers
 		}
 
 		[HttpPost("Login")]
-		public IActionResult Login([FromBody] Usuario usuario)
+		public IActionResult Login([FromBody] UsuarioViewModel usuario)
 		{
 			if (usuario == null)
 				return BadRequest();
@@ -30,7 +31,7 @@ namespace PloomesAPI.Controllers
 		}
 
 		[HttpPost("Refresh")]
-		public IActionResult Refresh([FromBody] Token token)
+		public IActionResult Refresh([FromBody] TokenViewModel token)
 		{
 			if (token == null)
 				return BadRequest();

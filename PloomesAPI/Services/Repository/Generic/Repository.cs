@@ -24,7 +24,7 @@ namespace PloomesAPI.Services.Repository.Generic
 
         public T GetById(Guid Id)
         {
-            var dado = _dbSet.AsNoTracking().FirstOrDefault(f => f.Id == Id);
+            var dado = _dbSet.FirstOrDefault(f => f.Id == Id);
             return dado;
         }
 
@@ -54,12 +54,12 @@ namespace PloomesAPI.Services.Repository.Generic
                 {
                     _dbContext.Entry(result).CurrentValues.SetValues(item);
                     _dbContext.SaveChanges();
-                    return result;
                 }
                 catch (Exception ex)
                 {
                     throw;
                 }
+                return result;
             }
             else
                 return null;

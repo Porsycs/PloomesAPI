@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PloomesAPI.Model;
 using PloomesAPI.Model.Context;
+using PloomesAPI.Model.ViewModel;
 using PloomesAPI.Services.Interface;
 using PloomesAPI.Services.Interface.Generic;
 using System.Runtime.Intrinsics.Arm;
@@ -18,10 +19,10 @@ namespace PloomesAPI.Services.Repository
 			_dbContext = dbContext;
 			_repository = repository;
 		}
-		public Usuario ValidaUsuario(Usuario usuario)
+		public Usuario ValidaUsuario(UsuarioViewModel usuario)
 		{
-			var senha = PasswordHash(usuario.UsuarioPassword, SHA256.Create());
-			return _dbContext.Usuarios.FirstOrDefault(f => (f.UsuarioLogin == usuario.UsuarioLogin) && (f.UsuarioPassword == senha));
+			var senha = PasswordHash(usuario.password, SHA256.Create());
+			return _dbContext.Usuarios.FirstOrDefault(f => (f.UsuarioLogin == usuario.login) && (f.UsuarioPassword == senha));
 		}
 
 		public Usuario ValidateCredentials(string login)

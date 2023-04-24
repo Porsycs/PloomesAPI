@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PloomesAPI.Common;
+using PloomesAPI.Model.ViewModel;
 using PloomesAPI.Services.Interface;
 using PloomesAPI.Services.Interface.Generic;
 
@@ -37,7 +38,7 @@ namespace PloomesAPI.Controllers
 		}
 
 		[HttpGet("GetClienteById/{Id}")]
-		[ProducesResponseType(200, Type = typeof(Cliente))]
+		[ProducesResponseType(200, Type = typeof(ClienteViewModel))]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(401)]
 		public IActionResult GetClienteById(Guid Id)
@@ -54,9 +55,9 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(200, Type = typeof(Cliente))]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(401)]
-		public IActionResult GetClienteByNome(string nome)
+		public IActionResult GetClienteByNome(string Nome)
 		{
-			var cliente = _clienteRepository.GetClienteByNome(nome);
+			var cliente = _clienteRepository.GetClienteByNome(Nome);
 
 			if(cliente == null)
 				return NotFound();
@@ -68,7 +69,7 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(200, Type = typeof(Cliente))]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(401)]
-		public IActionResult InsertCliente([FromBody] Cliente cli)
+		public IActionResult InsertCliente([FromBody] ClienteViewModel cli)
 		{
 			var cliente = _clienteRepository.InsertCliente(cli);
 			return Ok(cliente);
@@ -78,9 +79,9 @@ namespace PloomesAPI.Controllers
 		[ProducesResponseType(200, Type = typeof(Cliente))]
 		[ProducesResponseType(400)]
 		[ProducesResponseType(401)]
-		public IActionResult UpdateCliente([FromBody] Cliente cli)
+		public IActionResult UpdateCliente([FromBody] ClienteViewModel cli, [FromHeader] Guid Id)
 		{
-			var cliente = _clienteRepository.UpdateCliente(cli);
+			var cliente = _clienteRepository.UpdateCliente(cli, Id);
 			return Ok(cliente);
 		}
 

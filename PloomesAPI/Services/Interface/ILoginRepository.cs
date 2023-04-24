@@ -1,12 +1,13 @@
 ﻿using PloomesAPI.Model;
+using PloomesAPI.Model.ViewModel;
 
 namespace PloomesAPI.Services.Interface
 {
 	public interface ILoginRepository
 	{
-		Token ValidateCredentials(Usuario usuario);
+		Token ValidateCredentials(UsuarioViewModel usuario);
 
-		Token ValidateCredentials(Token token);
+		Token ValidateCredentials(TokenViewModel token);
 
 		bool RevokeToken(string usuarioLogin);
 	}
