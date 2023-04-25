@@ -55,15 +55,6 @@ builder.Services.AddAuthorization(auth =>
 		.RequireAuthenticatedUser().Build());
 });
 
-builder.Services.AddCors(options =>
-{
-	options.AddDefaultPolicy(builder =>
-	{
-		builder.AllowAnyOrigin()
-		.AllowAnyMethod()
-		.AllowAnyHeader();
-	});
-});
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -125,20 +116,17 @@ builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-	app.UseSwagger();
-	app.UseSwaggerUI(c =>
-	{
-		c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ploomes API v1");
-	});
-}
+	c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ploomes API v1");
+	c.DocumentTitle = "API Ploomes";
+	c.RoutePrefix = "";
+});
 
 app.UseHttpsRedirection();
 
 app.UseRouting();
-
-app.UseCors();
 
 app.UseAuthorization();
 
