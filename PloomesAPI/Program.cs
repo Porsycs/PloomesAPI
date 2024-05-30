@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PloomesAPI.Configurations;
 using PloomesAPI.Model.Context;
+using PloomesAPI.Services;
 using PloomesAPI.Services.Interface;
 using PloomesAPI.Services.Interface.Generic;
 using PloomesAPI.Services.Repository;
@@ -111,6 +112,9 @@ builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddTransient<ILoginRepository, LoginRepository>();
 builder.Services.AddTransient<IClienteRepository, ClienteRepository>();
 builder.Services.AddTransient<IFileRepository, FileRepository>();
+builder.Services.AddTransient<IMongoServices, MongoServices>();
+builder.Services.AddSingleton<RabbitMqConsumerServices>();
+builder.Services.AddSingleton<RabbitMqProducerServices>();
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var app = builder.Build();
