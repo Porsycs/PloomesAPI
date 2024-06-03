@@ -23,15 +23,15 @@ namespace PloomesAPI.Services
 
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: "crud_queue",
-                                durable: false,
-                                exclusive: false,
-                                autoDelete: false,
-                                arguments: null);
         }
 
-        public void StartConsumer()
+        public void StartConsumer(string queue)
         {
+            _channel.QueueDeclare(queue: queue,
+                    durable: false,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += (model, ea) =>
             {
@@ -41,9 +41,10 @@ namespace PloomesAPI.Services
                 Console.WriteLine("Received message: {0}", message);
             };
 
-            _channel.BasicConsume(queue: "crud_queue",
+            _channel.BasicConsume(queue: queue,
                                  autoAck: true,
                                  consumer: consumer);
+
         }
     }
 }

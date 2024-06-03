@@ -24,10 +24,10 @@ namespace PloomesAPI.Services
             _connection = factory.CreateConnection();
         }
 
-        public void SendMessage(string message)
+        public void SendMessage(string queue, string message)
         {
             using var channel = _connection.CreateModel();
-            channel.QueueDeclare(queue: "crud_queue",
+            channel.QueueDeclare(queue: queue,
                                  durable: false,
                                  exclusive: false,
                                  autoDelete: false,
@@ -36,7 +36,7 @@ namespace PloomesAPI.Services
             var body = Encoding.UTF8.GetBytes(message);
 
             channel.BasicPublish(exchange: "",
-                                 routingKey: "crud_queue",
+                                 routingKey: queue,
                                  basicProperties: null,
                                  body: body);
         }

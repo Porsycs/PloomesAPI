@@ -84,10 +84,11 @@ namespace PloomesAPI.Controllers
             }
             catch (Exception e)
             {
-                _rabbitMqProducer.SendMessage(System.Text.Json.JsonSerializer.Serialize(cli));
+                _rabbitMqProducer.SendMessage("InsertCliente", System.Text.Json.JsonSerializer.Serialize(cli));
                 var document = new
                 {
-                    Sucesso = false, 
+                    Sucesso = false,
+                    Data = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
                     Titulo = "Erro ao inserir cliente",
                     Mensagem = e.Message
                 };
